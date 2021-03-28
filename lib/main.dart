@@ -18,7 +18,14 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
         primarySwatch: createMaterialColor(kPrimaryColor),
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        fontFamily: 'Lato'
+        fontFamily: 'Lato',
+        textTheme: TextTheme(
+          headline1: TextStyle(
+            fontFamily: 'Dancing',
+            fontWeight: FontWeight.bold,
+            fontSize: 52,
+          )
+        )
       ),
       home: HomeScreen(),
     );
