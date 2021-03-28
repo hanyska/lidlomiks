@@ -4,12 +4,14 @@ import 'package:lidlomiks/components/rounded_wrapper.dart';
 import '../constants.dart';
 
 class RoundedInput extends StatefulWidget {
+  final TextEditingController controller;
   final String hintText;
   final Icon icon;
   final bool isPassword;
 
   RoundedInput({
     Key key,
+    this.controller,
     this.hintText,
     this.icon,
     this.isPassword = false,
@@ -43,6 +45,7 @@ class _RoundedInputState extends State<RoundedInput> {
   Widget build(BuildContext context) {
     return RoundedWrapper(
       child: TextField(
+        controller: widget.controller,
         obscureText: widget.isPassword ? !showPassword : false,
         decoration: InputDecoration(
           icon: widget.icon,

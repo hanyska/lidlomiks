@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "9468546309",
+    "project_id": "lidlomikss",
+    "storage_bucket": "lidlomikss.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:9468546309:android:31a01fd775eb061b667b6c",
+        "android_client_info": {
+          "package_name": "com.janusza.lidlomiks"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "9468546309-23c0c7vf3eisrm9misnus317r57m2rav.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzGdAUEu3jMANcvowhZlZw0hjFcYVtFOA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "9468546309-23c0c7vf3eisrm9misnus317r57m2rav.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

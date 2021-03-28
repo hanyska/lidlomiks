@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lidlomiks/components/rounded_button.dart';
@@ -11,6 +12,46 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final TextEditingController _emailController = new TextEditingController();
+  final TextEditingController _passwordController = new TextEditingController();
+  bool _success;
+  String _userEmail;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _register() async {
+
+    UserCredential userCredential = await
+    _auth.createUserWithEmailAndPassword(
+      email: _emailController.text,
+      password: _passwordController.text,
+    );
+
+    final User user = userCredential.user;
+
+    if (user != null) {
+      setState(() {
+        _success = true;
+        _userEmail = user.email;
+      });
+    } else {
+      setState(() => _success = true);
+    }
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -37,10 +78,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hintText: 'Nick',
                 ),
                 RoundedInput(
+                  controller: _emailController,
                   icon: Icon(Icons.email, color: kPrimaryColor),
                   hintText: 'Twój email',
                 ),
                 RoundedInput(
+                  controller: _passwordController,
                   icon: Icon(Icons.lock, color: kPrimaryColor),
                   hintText: 'Hasło',
                   isPassword: true,
@@ -52,7 +95,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 RoundedButton(
                   text: "Zarejestruj się".toUpperCase(),
-                  onClicked: () => print('Login'),
+                  onClicked: _register
                 ),
                 SizedBox(height: size.height * 0.05),
                 Row(
@@ -74,6 +117,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                   ],
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  child: Text(_success == null
+                      ? ''
+                      : (_success
+                      ? 'Successfully registered ' + _userEmail
+                      : 'Registration failed')),
                 )
               ],
             ),
