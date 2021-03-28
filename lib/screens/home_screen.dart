@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lidlomiks/components/rounded_button.dart';
 import 'package:lidlomiks/constants.dart';
 import 'package:lidlomiks/screens/login_screen.dart';
+import 'package:lidlomiks/screens/register_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -40,7 +41,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 RoundedButton(
                   text: "Zarejestruj się".toUpperCase(),
                   color: kGrey.withOpacity(0.7),
-                  onClicked: () => print('Sing up'),
+                  onClicked: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => RegisterScreen()),
+                  ),
                 ),
               ],
             ),
