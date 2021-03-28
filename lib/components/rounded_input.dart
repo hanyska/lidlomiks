@@ -50,7 +50,6 @@ class _RoundedInputState extends State<RoundedInput> {
           hintStyle: TextStyle(fontSize: 14.0, color: kGrey),
           border: InputBorder.none,
           suffixIcon: widget.isPassword ? passwordSuffixIcon : null,
-          focusColor: Colors.white
         ),
       )
     );

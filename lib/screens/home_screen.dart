@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 RoundedButton(
                   text: "Zarejestruj się".toUpperCase(),
-                  color: kLightGrey,
+                  color: kGrey.withOpacity(0.7),
                   onClicked: () => print('Sing up'),
                 ),
               ],
