@@ -5,6 +5,9 @@ class FirebaseService {
       case "email-already-in-use":
         return "Adres e-mail jest już używany! Przejdź do strony logowania.";
         break;
+      case "weak-password":
+        return "Podane hasło jest za słabe!";
+        break;
       case "ERROR_WRONG_PASSWORD":
         return "Zły email lub hasło";
         break;

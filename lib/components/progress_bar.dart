@@ -64,7 +64,7 @@ class _MyIconSpinnerState extends State<MyIconSpinner> with TickerProviderStateM
     return ScaleTransition(
       scale: Tween(begin: 0.5, end: 1.0).animate(_animation),
       child: Icon(
-        Icons.favorite,
+        Icons.favorite_border_outlined,
         size: MediaQuery.of(context).size.width * 0.5,
         color: kPrimaryColor
       ),

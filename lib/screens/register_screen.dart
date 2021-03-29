@@ -15,7 +15,6 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final TextEditingController _emailController = new TextEditingController();
   final TextEditingController _passwordController = new TextEditingController();
 
@@ -34,29 +33,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void _register() async {
     ProgressBar().show();
     UserCredential userCredential;
-    String errorMessage;
 
     try {
-      userCredential = await _auth.createUserWithEmailAndPassword(
+      userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
       );
     } catch (error) {
-      errorMessage = FirebaseService.getMessageFromErrorCode(error.code);
+      String errorMessage = FirebaseService.getMessageFromErrorCode(error.code);
+      Toaster.show(errorMessage, toasterType: ToasterType.DANGER, isLongLength: true);
     }
 
-    ProgressBar().hide();
-    if (errorMessage != null || userCredential.user == null) {
-      Toaster.show(errorMessage, toasterType: ToasterType.DANGER, isLongLength: true);
-    } else {
+    if (userCredential?.user != null) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => LoginScreen()),
       );
       Toaster.show('Pomyślnie założono konto. Możesz się teraz zalogować', toasterType: ToasterType.SUCCESS, isLongLength: true);
     }
+    ProgressBar().hide();
   }
-
 
 
   @override
@@ -64,71 +60,71 @@ class _RegisterScreenState extends State<RegisterScreen> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
-            margin: EdgeInsets.only(top: 20.0),
-            padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
-            width: double.infinity,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Zarejestruj się',
-                  style: Theme.of(context).textTheme.headline1,
-                ),
-                SvgPicture.asset(
-                  "assets/images/register.svg",
-                  height: size.height * 0.4,
-                ),
-                RoundedInput(
-                  icon: Icon(Icons.person, color: kPrimaryColor),
-                  hintText: 'Nick',
-                ),
-                RoundedInput(
-                  controller: _emailController,
-                  icon: Icon(Icons.email, color: kPrimaryColor),
-                  hintText: 'Twój email',
-                ),
-                RoundedInput(
-                  controller: _passwordController,
-                  icon: Icon(Icons.lock, color: kPrimaryColor),
-                  hintText: 'Hasło',
-                  isPassword: true,
-                ),
-                RoundedInput(
-                  icon: Icon(Icons.lock, color: kPrimaryColor),
-                  hintText: 'Powtórz hasło',
-                  isPassword: true,
-                ),
-                RoundedButton(
-                  text: "Zarejestruj się".toUpperCase(),
-                  onClicked: _register
-                ),
-                SizedBox(height: size.height * 0.05),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Masz już konto?'),
-                    SizedBox(width: 5),
-                    GestureDetector(
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginScreen()),
-                      ),
-                      child: Text(
-                        'Zaloguj się',
-                        style: TextStyle(
-                            color: kPrimaryColor,
-                            fontWeight: FontWeight.bold
-                        ),
+      appBar: AppBar(),
+      body: SingleChildScrollView(
+        child: Container(
+          margin: EdgeInsets.only(top: 20.0),
+          padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+          width: double.infinity,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Zarejestruj się',
+                style: Theme.of(context).textTheme.headline1,
+              ),
+              SvgPicture.asset(
+                "assets/images/register.svg",
+                height: size.height * 0.4,
+              ),
+              RoundedInput(
+                icon: Icon(Icons.person, color: kPrimaryColor),
+                hintText: 'Nick',
+              ),
+              RoundedInput(
+                controller: _emailController,
+                icon: Icon(Icons.email, color: kPrimaryColor),
+                hintText: 'Twój email',
+              ),
+              RoundedInput(
+                controller: _passwordController,
+                icon: Icon(Icons.lock, color: kPrimaryColor),
+                hintText: 'Hasło',
+                isPassword: true,
+              ),
+              RoundedInput(
+                icon: Icon(Icons.lock, color: kPrimaryColor),
+                hintText: 'Powtórz hasło',
+                isPassword: true,
+              ),
+              RoundedButton(
+                text: "Zarejestruj się".toUpperCase(),
+                onClicked: _register
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Masz już konto?'),
+                  SizedBox(width: 5),
+                  GestureDetector(
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                    ),
+                    child: Text(
+                      'Zaloguj się',
+                      style: TextStyle(
+                          color: kPrimaryColor,
+                          fontWeight: FontWeight.bold
                       ),
                     ),
-                  ],
-                )
-              ],
-            ),
+                  ),
+                ],
+              )
+            ],
           ),
-        )
+        ),
+      )
     );
   }
 }
