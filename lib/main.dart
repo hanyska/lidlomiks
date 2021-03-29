@@ -4,6 +4,8 @@ import 'package:lidlomiks/helpers/colors.dart';
 import 'package:lidlomiks/screens/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import 'helpers/navigation_service.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -16,6 +18,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Lidlomiks',
       debugShowCheckedModeBanner: false,
+      navigatorKey: NavigationService.navigatorKey,
       theme: ThemeData(
         primaryColor: kPrimaryColor,
         scaffoldBackgroundColor: Colors.white,

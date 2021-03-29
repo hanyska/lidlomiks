@@ -1,9 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lidlomiks/components/progress_bar.dart';
 import 'package:lidlomiks/components/rounded_button.dart';
 import 'package:lidlomiks/components/rounded_input.dart';
+import 'package:lidlomiks/components/toast.dart';
 import 'package:lidlomiks/constants.dart';
+import 'package:lidlomiks/helpers/firebase_service.dart';
 import 'package:lidlomiks/screens/login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -15,8 +18,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final TextEditingController _emailController = new TextEditingController();
   final TextEditingController _passwordController = new TextEditingController();
-  bool _success;
-  String _userEmail;
 
   @override
   void initState() {
@@ -31,22 +32,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void _register() async {
+    ProgressBar().show();
+    UserCredential userCredential;
+    String errorMessage;
 
-    UserCredential userCredential = await
-    _auth.createUserWithEmailAndPassword(
-      email: _emailController.text,
-      password: _passwordController.text,
-    );
+    try {
+      userCredential = await _auth.createUserWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+    } catch (error) {
+      errorMessage = FirebaseService.getMessageFromErrorCode(error.code);
+    }
 
-    final User user = userCredential.user;
-
-    if (user != null) {
-      setState(() {
-        _success = true;
-        _userEmail = user.email;
-      });
+    ProgressBar().hide();
+    if (errorMessage != null || userCredential.user == null) {
+      Toaster.show(errorMessage, toasterType: ToasterType.DANGER, isLongLength: true);
     } else {
-      setState(() => _success = true);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+      );
+      Toaster.show('Pomyślnie założono konto. Możesz się teraz zalogować', toasterType: ToasterType.SUCCESS, isLongLength: true);
     }
   }
 
@@ -117,14 +124,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                   ],
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  child: Text(_success == null
-                      ? ''
-                      : (_success
-                      ? 'Successfully registered ' + _userEmail
-                      : 'Registration failed')),
                 )
               ],
             ),
