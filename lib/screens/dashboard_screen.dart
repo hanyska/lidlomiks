@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lidlomiks/screens/main/app_bar.dart';
 import 'package:lidlomiks/screens/main/drawer.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -24,10 +25,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Przepisy'),
-      ),
-      drawer: MyDrawer.myDrawer,
+      appBar: myAppBar(context: context, title: 'Przepisy'),
+      drawer: myDrawer,
       body: SafeArea(
         child: Container(
           child: Text('Cześć ${user.email}'),
