@@ -12,6 +12,7 @@ import 'package:lidlomiks/screens/register_screen.dart';
 import 'dashboard_screen.dart';
 
 class LoginScreen extends StatefulWidget {
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -19,11 +20,13 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = new TextEditingController();
   final TextEditingController _passwordController = new TextEditingController();
+  String passwordError = "";
+  final _formKey = GlobalKey<FormState>();
 
   void _login() async {
+    if (!_formKey.currentState.validate()) return;
     ProgressBar().show();
     UserCredential userCredential;
-
     try {
       userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text,
@@ -31,11 +34,13 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     } catch (error) {
       String errorMessage = FirebaseService.getMessageFromErrorCode(error.code);
+      _passwordController.clear();
+      setState(() => passwordError = errorMessage);
       Toaster.show(errorMessage, toasterType: ToasterType.DANGER, isLongLength: true);
     }
 
     ProgressBar().hide();
-    if (userCredential.user != null) {
+    if (userCredential?.user != null) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => DashboardScreen(), ),
@@ -67,17 +72,34 @@ class _LoginScreenState extends State<LoginScreen> {
                 "assets/images/login.svg",
                 height: size.height * 0.4,
               ),
-              RoundedInput(
-                controller: _emailController,
-                icon: Icon(Icons.email, color: kPrimaryColor),
-                hintText: 'Twój email',
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    RoundedInput(
+                      controller: _emailController,
+                      icon: Icon(Icons.email, color: kPrimaryColor),
+                      inputType: InputType.EMAIL,
+                      hintText: 'Twój email',
+                    ),
+                    RoundedInput(
+                      controller: _passwordController,
+                      icon: Icon(Icons.lock, color: kPrimaryColor),
+                      hintText: 'Hasło',
+                      inputType: InputType.PASSWORD,
+                    ),
+                  ],
+                )
               ),
-              RoundedInput(
-                controller: _passwordController,
-                icon: Icon(Icons.lock, color: kPrimaryColor),
-                hintText: 'Hasło',
-                isPassword: true,
-              ),
+              if (passwordError.isNotEmpty)
+                Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.only(left: 30.0, bottom: 10, top: 15),
+                  child: Text(
+                    passwordError,
+                    style: TextStyle(color: kPrimaryColor),
+                  ),
+                ),
               RoundedButton(
                 text: "Zaloguj się".toUpperCase(),
                 onClicked: _login

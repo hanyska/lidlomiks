@@ -26,6 +26,8 @@ class FirebaseService {
       case "invalid-email":
         return "Adres email jest nieprawidłowy!";
         break;
+      case "wrong-password":
+        return "Niepoprawny email lub hasło";
       default:
         return "Logowanie nie powiodło się. Proszę spróbuj ponownie.";
         break;

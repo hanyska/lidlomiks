@@ -17,6 +17,9 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailController = new TextEditingController();
   final TextEditingController _passwordController = new TextEditingController();
+  final TextEditingController _confirmPasswordController = new TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  String _passwordError;
 
   @override
   void initState() {
@@ -27,10 +30,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
   void _register() async {
+    if (_passwordController.text != _confirmPasswordController.text) {
+      setState(() => _passwordError = 'Hasła muszą być takie same!');
+      return;
+    } else {
+      setState(() => _passwordError = null);
+    }
+    if (!_formKey.currentState.validate()) return;
+
     ProgressBar().show();
     UserCredential userCredential;
 
@@ -41,6 +53,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       );
     } catch (error) {
       String errorMessage = FirebaseService.getMessageFromErrorCode(error.code);
+      _passwordController.clear();
+      _confirmPasswordController.clear();
       Toaster.show(errorMessage, toasterType: ToasterType.DANGER, isLongLength: true);
     }
 
@@ -77,26 +91,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 "assets/images/register.svg",
                 height: size.height * 0.4,
               ),
-              RoundedInput(
-                icon: Icon(Icons.person, color: kPrimaryColor),
-                hintText: 'Nick',
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    RoundedInput(
+                      controller: _emailController,
+                      icon: Icon(Icons.email, color: kPrimaryColor),
+                      inputType: InputType.EMAIL,
+                      hintText: 'Twój email',
+                    ),
+                    RoundedInput(
+                      controller: _passwordController,
+                      icon: Icon(Icons.lock, color: kPrimaryColor),
+                      hintText: 'Hasło',
+                      inputType: InputType.PASSWORD,
+                    ),
+                    RoundedInput(
+                      controller: _confirmPasswordController,
+                      icon: Icon(Icons.lock, color: kPrimaryColor),
+                      hintText: 'Powtórz hasło',
+                      inputType: InputType.PASSWORD,
+                    ),
+                  ]
+                )
               ),
-              RoundedInput(
-                controller: _emailController,
-                icon: Icon(Icons.email, color: kPrimaryColor),
-                hintText: 'Twój email',
-              ),
-              RoundedInput(
-                controller: _passwordController,
-                icon: Icon(Icons.lock, color: kPrimaryColor),
-                hintText: 'Hasło',
-                isPassword: true,
-              ),
-              RoundedInput(
-                icon: Icon(Icons.lock, color: kPrimaryColor),
-                hintText: 'Powtórz hasło',
-                isPassword: true,
-              ),
+              if (_passwordError != null)
+                Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.only(left: 30.0, bottom: 10, top: 15),
+                  child: Text(
+                    _passwordError,
+                    style: TextStyle(color: kPrimaryColor),
+                  ),
+                ),
               RoundedButton(
                 text: "Zarejestruj się".toUpperCase(),
                 onClicked: _register
