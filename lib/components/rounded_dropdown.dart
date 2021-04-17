@@ -38,7 +38,7 @@ class _RoundedDropdownState extends State<RoundedDropdown> {
         iconEnabledColor: kLightGrey,
         iconDisabledColor: kGrey,
         value: widget.controller.text,
-        onChanged: (dynamic value) => setState(() => widget.controller.text = value),
+        onChanged: widget.onChanged,
         isExpanded: true,
         items: widget.items.map((value) => onlyTextWidget(value)).toList(),
       )

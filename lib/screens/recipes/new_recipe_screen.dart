@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lidlomiks/components/image_picker_widget.dart';
 import 'package:lidlomiks/components/rounded_input.dart';
+import 'package:lidlomiks/components/toast.dart';
 import 'package:lidlomiks/constants.dart';
+import 'package:lidlomiks/models/Ingredient.dart';
 import 'package:lidlomiks/screens/main/app_bar.dart';
 
 import 'ingredients_text_fields.dart';
@@ -17,7 +19,19 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
   final TextEditingController _titleCtr = new TextEditingController();
   final TextEditingController _tipsCtr = new TextEditingController();
   final TextEditingController _recipeCtr = new TextEditingController();
-  List<String> ingredients = [null];
+  List<Ingredient> ingredients = [
+    new Ingredient(amount: null, name: null, measure: null)
+  ];
+
+
+  void _saveForm() {
+    bool validate = _formKey.currentState.validate();
+    if (!validate) {
+      Toaster.show('Formularz zawiera błędy.', toasterType: ToasterType.DANGER);
+      return;
+    }
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +63,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                   controller: _tipsCtr,
                   inputType: InputType.TEXT,
                   hintText: 'Wskazówki',
-                  isRequired: true,
+                  isRequired: false,
                 ),
                 SizedBox(height: 20),
                 Text('Przepis', textAlign: TextAlign.left),
@@ -71,7 +85,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
         child: RaisedButton(
           color: kPrimaryColor,
           padding: EdgeInsets.symmetric(vertical: 20.0),
-          onPressed: (){},
+          onPressed: _saveForm,
           child: Text(
             'Dodaj'.toUpperCase(),
             style: TextStyle(
@@ -88,38 +102,46 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
 
   List<Widget> ingredientsListWidget(){
 
-    List<Widget> friendsTextFields = [];
+    List<Widget> ingredientsTextFields = [];
 
-    for (int i=0; i<ingredients.length; i++) {
-      friendsTextFields.add(
+    for (int i = 0; i < ingredients.length; i++) {
+      bool canAdd = i == ingredients.length - 1;
+      ingredientsTextFields.add(
           Row(
             children: [
-              Expanded(child: IngredientTextFields(list: ingredients, index: i)),
-              _addRemoveButton(i == ingredients.length - 1, i),
+              Expanded(
+                child: IngredientTextFields(
+                  list: ingredients,
+                  index: i
+                )
+              ),
+              InkWell(
+                onTap: () => setState(() => canAdd
+                    ? ingredients.add(new Ingredient(amount: null, name: null, measure: null))
+                    : ingredients.removeAt(i)),
+                child: Container(
+                  width: 30,
+                  height: 30,
+                  margin: EdgeInsets.symmetric(horizontal: 15.0),
+                  decoration: BoxDecoration(
+                    color: canAdd
+                      ? Colors.green
+                      : Colors.red,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Icon(
+                    canAdd
+                      ? Icons.add
+                      : Icons.remove,
+                    color: Colors.white
+                  ),
+                ),
+              )
             ],
           )
       );
     }
-    return friendsTextFields;
-  }
-
-  /// add / remove button
-  Widget _addRemoveButton(bool add, int index){
-    return InkWell(
-      onTap: () => setState(() => add
-        ? ingredients.add(null)
-        : ingredients.removeAt(index)),
-      child: Container(
-        width: 30,
-        height: 30,
-        margin: EdgeInsets.symmetric(horizontal: 15.0),
-        decoration: BoxDecoration(
-          color: (add) ? Colors.green : Colors.red,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Icon((add) ? Icons.add : Icons.remove, color: Colors.white,),
-      ),
-    );
+    return ingredientsTextFields;
   }
 
 

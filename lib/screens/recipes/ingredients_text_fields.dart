@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:lidlomiks/components/rounded_dropdown.dart';
 import 'package:lidlomiks/components/rounded_input.dart';
 import 'package:lidlomiks/constants.dart';
+import 'package:lidlomiks/models/Ingredient.dart';
 
 class IngredientTextFields extends StatefulWidget {
   final int index;
-  final dynamic list;
+  final List<Ingredient> list;
 
   IngredientTextFields({
     this.index,
@@ -36,7 +37,7 @@ class _IngredientTextFieldsState extends State<IngredientTextFields> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _nameController.text = widget.list[widget.index] ?? '';
+      _nameController.text = widget.list[widget.index].name ?? '';
     });
 
     return Column(
@@ -51,7 +52,7 @@ class _IngredientTextFieldsState extends State<IngredientTextFields> {
                 inputType: InputType.NUMBER,
                 hintText: 'Ilość',
                 isRequired: true,
-                onChanged: (v) => widget.list[widget.index] = v,
+                onChanged: (v) => widget.list[widget.index].amount = int.parse(v),
               ),
             ),
             SizedBox(width: 5.0),
@@ -60,6 +61,10 @@ class _IngredientTextFieldsState extends State<IngredientTextFields> {
               child: RoundedDropdown(
                 controller: _measureController,
                 items: kMeasures,
+                onChanged: (v) {
+                  setState(() => _measureController.text = v);
+                  widget.list[widget.index].measure = v.toString();
+                },
               ),
             ),
           ],
@@ -72,7 +77,7 @@ class _IngredientTextFieldsState extends State<IngredientTextFields> {
                 inputType: InputType.TEXT,
                 hintText: 'Składnik',
                 isRequired: true,
-                onChanged: (v) => widget.list[widget.index] = v,
+                onChanged: (v) => widget.list[widget.index].name = v,
               ),
             ),
           ],
