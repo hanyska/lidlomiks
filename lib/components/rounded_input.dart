@@ -3,7 +3,7 @@ import 'package:lidlomiks/components/rounded_wrapper.dart';
 
 import '../constants.dart';
 
-enum InputType { EMAIL, PASSWORD, TEXT }
+enum InputType { EMAIL, PASSWORD, TEXT, NUMBER, MULTILINE }
 
 class RoundedInput extends StatefulWidget {
   final TextEditingController controller;
@@ -11,6 +11,7 @@ class RoundedInput extends StatefulWidget {
   final String hintText;
   final Icon icon;
   final bool isRequired;
+  final Function onChanged;
 
    RoundedInput({
     Key key,
@@ -19,6 +20,7 @@ class RoundedInput extends StatefulWidget {
     this.hintText,
     this.icon,
     this.isRequired = false,
+   this.onChanged
   }): super(key: key);
 
   @override
@@ -51,6 +53,8 @@ class _RoundedInputState extends State<RoundedInput> {
         return TextInputType.emailAddress;
       case InputType.PASSWORD:
         return TextInputType.visiblePassword;
+      case InputType.NUMBER:
+        return TextInputType.numberWithOptions(signed: true);
       case InputType.TEXT:
       default:
         return TextInputType.text;
@@ -90,7 +94,11 @@ class _RoundedInputState extends State<RoundedInput> {
           border: InputBorder.none,
           suffixIcon: widget.inputType == InputType.PASSWORD ? passwordSuffixIcon : null,
         ),
-        validator: _validator
+        maxLines: widget.inputType == InputType.MULTILINE
+            ? 3
+            : 1,
+        validator: _validator,
+        onChanged: widget.onChanged,
       )
     );
   }

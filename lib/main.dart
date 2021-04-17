@@ -5,6 +5,7 @@ import 'package:lidlomiks/helpers/colors.dart';
 import 'package:lidlomiks/screens/dashboard_screen.dart';
 import 'package:lidlomiks/screens/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:lidlomiks/screens/recipes/new_recipe_screen.dart';
 
 import 'helpers/navigation_service.dart';
 
@@ -37,6 +38,9 @@ class MyApp extends StatelessWidget {
           )
         )
       ),
+      routes: {
+        NewRecipeScreen.routeName: (context) => NewRecipeScreen(),
+      },
       home: firebaseUser != null ? DashboardScreen() : HomeScreen(),
     );
   }

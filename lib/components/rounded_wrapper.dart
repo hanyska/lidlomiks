@@ -19,7 +19,7 @@ class RoundedWrapper extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       width: size.width * 0.8,
       decoration: BoxDecoration(
-        color: kLightGrey,
+        color: kVeryLightGrey,
         borderRadius: BorderRadius.circular(29)
       ),
       child: child,
