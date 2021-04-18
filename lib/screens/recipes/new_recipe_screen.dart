@@ -4,6 +4,8 @@ import 'package:lidlomiks/components/rounded_input.dart';
 import 'package:lidlomiks/components/toast.dart';
 import 'package:lidlomiks/constants.dart';
 import 'package:lidlomiks/models/Ingredient.dart';
+import 'package:lidlomiks/models/Recipe.dart';
+import 'package:lidlomiks/providers/recipe.dart';
 import 'package:lidlomiks/screens/main/app_bar.dart';
 
 import 'ingredients_text_fields.dart';
@@ -24,11 +26,28 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
   ];
 
 
-  void _saveForm() {
+  Future<void> _saveForm() async {
     bool validate = _formKey.currentState.validate();
     if (!validate) {
       Toaster.show('Formularz zawiera błędy.', toasterType: ToasterType.DANGER);
       return;
+    }
+
+    Recipe newRecipe = new Recipe(
+      name: _titleCtr.text,
+      ingredients: ingredients,
+      tips: _tipsCtr.text,
+      recipe: _recipeCtr.text,
+      imagePath: null
+    );
+
+    bool response = await RecipeService.addRecipe(newRecipe);
+
+    if (response) {
+      Navigator.of(context).pop();
+      Toaster.show('Dodano przepis', toasterType: ToasterType.SUCCESS);
+    } else {
+      Toaster.show('Formularz zawiera błędy', toasterType: ToasterType.DANGER);
     }
 
   }

@@ -8,4 +8,11 @@ class Ingredient {
     this.amount,
     this.measure
   });
+
+  Map<String, dynamic> toJson() =>
+    {
+      'name': name,
+      'amount': amount,
+      'measure': measure,
+    };
 }
