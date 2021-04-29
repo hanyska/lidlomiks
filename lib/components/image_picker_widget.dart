@@ -5,56 +5,35 @@ import 'package:lidlomiks/components/rounded_button.dart';
 import 'package:lidlomiks/components/toast.dart';
 import 'package:lidlomiks/constants.dart';
 
-class ImageUploadModel {
-  bool isUploaded;
-  bool uploading;
-  File imageFile;
-  String imageUrl;
-
-  ImageUploadModel({
-    this.isUploaded,
-    this.uploading,
-    this.imageFile,
-    this.imageUrl,
-  });
-}
 
 class ImagePickerWidget extends StatefulWidget {
+  final Function updatedFile;
+
+  ImagePickerWidget({
+    this.updatedFile,
+  });
+
   @override
   _ImagePickerWidgetState createState() => _ImagePickerWidgetState();
 }
 
 class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   File image;
-  final picker = ImagePicker();
 
-
-  void _fromGallery() async {
+  void _takePhoto(ImageSource imageSource) async {
     Navigator.pop(context);
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    PickedFile pickedFile = await ImagePicker().getImage(
+      source: imageSource,
+      imageQuality: 70,
+    );
 
-    setState(() {
-      if (pickedFile != null) {
-        image = File(pickedFile.path);
-        Toaster.show('Dodano zdjecie.', toasterType: ToasterType.SUCCESS);
-      } else {
-        Toaster.show('Nie wybrano żadnego zdjęcia.', toasterType: ToasterType.DANGER);
-      }
-    });
-  }
-
-  void _fromCamera() async {
-    Navigator.pop(context);
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
-
-    setState(() {
-      if (pickedFile != null) {
-        image = File(pickedFile.path);
-        Toaster.show('Dodano zdjecie.', toasterType: ToasterType.SUCCESS);
-      } else {
-        Toaster.show('Nie wybrano żadnego zdjęcia.', toasterType: ToasterType.DANGER);
-      }
-    });
+    if (pickedFile != null) {
+      setState(() => image = File(pickedFile.path));
+      widget.updatedFile(image);
+      Toaster.show('Dodano zdjecie.', toasterType: ToasterType.SUCCESS);
+    } else {
+      Toaster.show('Nie wybrano żadnego zdjęcia.', toasterType: ToasterType.DANGER);
+    }
   }
 
   Future _onAddImageClick() async {
@@ -69,11 +48,11 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
           children: [
             RoundedButton(
               text: 'Zrób zdjęcie',
-              onClicked: () => _fromCamera(),
+              onClicked: () => _takePhoto(ImageSource.camera),
             ),
             RoundedButton(
               text: 'Wybierz z galerii',
-              onClicked: () => _fromGallery(),
+              onClicked: () => _takePhoto(ImageSource.gallery),
             ),
           ],
         ),
@@ -85,7 +64,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      padding: EdgeInsets.all(20.0),
       decoration: BoxDecoration(
           color: kVeryLightGrey,
           borderRadius: BorderRadius.circular(29)
@@ -108,12 +87,10 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                   child: InkWell(
                     child: Icon(
                       Icons.remove_circle,
-                      size: 20,
-                      color: Colors.red,
+                      size: 28,
+                      color: kPrimaryColor
                     ),
-                    onTap: () {
-                      setState(() { image = null;});
-                    },
+                    onTap: () => setState(() => image = null),
                   ),
                 ),
               ],

@@ -6,7 +6,7 @@ import 'package:lidlomiks/components/rounded_button.dart';
 import 'package:lidlomiks/components/rounded_input.dart';
 import 'package:lidlomiks/components/toast.dart';
 import 'package:lidlomiks/constants.dart';
-import 'package:lidlomiks/helpers/firebase_service.dart';
+import 'package:lidlomiks/providers/firebase_service.dart';
 import 'package:lidlomiks/screens/login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {

@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lidlomiks/constants.dart';
+import 'package:lidlomiks/providers/recipe_service.dart';
 import 'package:lidlomiks/screens/main/app_bar.dart';
 import 'package:lidlomiks/screens/main/drawer.dart';
+import 'package:lidlomiks/screens/recipes/my_recipe_screen.dart';
 import 'package:lidlomiks/screens/recipes/new_recipe_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -57,18 +59,15 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
               child: Text('Cześć 2 ${user.email}'),
             ),
           ),
-          SafeArea(
-            child: Container(
-              child: Text('Cześć 3 ${user.email}'),
-            ),
-          )
+          MyRecipeScreen(),
         ],
       ),
       floatingActionButton: _tabController.index == 2 ? FloatingActionButton(
         child: const Icon(Icons.add),
         backgroundColor: kPrimaryColor,
         onPressed: () {
-          Navigator.pushNamed(context, NewRecipeScreen.routeName);
+          Navigator.pushNamed(context, NewRecipeScreen.routeName)
+            .then((value) => RecipeService.getMyRecipe());
         },
 
       ) : null,

@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:lidlomiks/components/image_picker_widget.dart';
+import 'package:lidlomiks/components/progress_bar.dart';
 import 'package:lidlomiks/components/rounded_input.dart';
 import 'package:lidlomiks/components/toast.dart';
 import 'package:lidlomiks/constants.dart';
 import 'package:lidlomiks/models/Ingredient.dart';
 import 'package:lidlomiks/models/Recipe.dart';
-import 'package:lidlomiks/providers/recipe.dart';
+import 'package:lidlomiks/providers/firebase_service.dart';
+import 'package:lidlomiks/providers/recipe_service.dart';
 import 'package:lidlomiks/screens/main/app_bar.dart';
 
 import 'ingredients_text_fields.dart';
@@ -24,21 +28,24 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
   List<Ingredient> ingredients = [
     new Ingredient(amount: null, name: null, measure: null)
   ];
+  File _photoFile;
 
 
   Future<void> _saveForm() async {
     bool validate = _formKey.currentState.validate();
-    if (!validate) {
+    if (!validate || _photoFile == null) {
       Toaster.show('Formularz zawiera błędy.', toasterType: ToasterType.DANGER);
       return;
     }
+    ProgressBar().show();
+    String imageUrl = await FirebaseService.uploadRecipeImage(_photoFile);
 
     Recipe newRecipe = new Recipe(
       name: _titleCtr.text,
       ingredients: ingredients,
       tips: _tipsCtr.text,
       recipe: _recipeCtr.text,
-      imagePath: null
+      imagePath: imageUrl
     );
 
     bool response = await RecipeService.addRecipe(newRecipe);
@@ -49,6 +56,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
     } else {
       Toaster.show('Formularz zawiera błędy', toasterType: ToasterType.DANGER);
     }
+    ProgressBar().hide();
 
   }
 
@@ -94,7 +102,12 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                 ),
                 SizedBox(height: 20),
                 Text('Zdjęcie', textAlign: TextAlign.left),
-                ImagePickerWidget(),
+                ImagePickerWidget(
+                  updatedFile: (File newFile) {
+                    print(newFile);
+                    setState(() => _photoFile = newFile);
+                  },
+                ),
               ],
             ),
           ),

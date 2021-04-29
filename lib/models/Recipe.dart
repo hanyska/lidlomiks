@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lidlomiks/models/Ingredient.dart';
+import 'package:lidlomiks/providers/firebase_service.dart';
 
 class Recipe {
   String userId;
@@ -26,7 +26,7 @@ class Recipe {
 
   Map<String, dynamic> toJson() =>
     {
-      'userId': FirebaseAuth.instance.currentUser.uid,
+      'userId': FirebaseService.userId,
       'name': name,
       'ingredients': ingredients.map((e) => e.toJson()).toList(),
       'tips': tips,

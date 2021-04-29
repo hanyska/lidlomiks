@@ -1,4 +1,29 @@
+import 'dart:io';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
 class FirebaseService {
+  static FirebaseStorage fbStorage = FirebaseStorage.instance;
+  static Reference recipesCollection = fbStorage.ref().child('recipe_images');
+
+  static String get userId => FirebaseAuth.instance.currentUser.uid ?? null;
+
+  static Future<String> uploadRecipeImage(File photoFile) async {
+    Reference ref = recipesCollection
+      .child('/${FirebaseService.userId}')
+      .child('/${DateTime.now().toString()}.jpg');
+
+    UploadTask uploadTask = ref.putFile(photoFile);
+
+    String url;
+    await uploadTask.whenComplete(() async {
+      url = await uploadTask.snapshot.ref.getDownloadURL();
+    });
+
+    return url;
+  }
+
   static String getMessageFromErrorCode(String errorCode) {
     switch (errorCode) {
       case "account-exists-with-different-credential":
