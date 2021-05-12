@@ -1,3 +1,4 @@
+import 'package:lidlomiks/helpers/date_time_helper.dart';
 import 'package:lidlomiks/models/Ingredient.dart';
 import 'package:lidlomiks/providers/firebase_service.dart';
 
@@ -34,4 +35,19 @@ class Recipe {
       'imagePath': imagePath,
       'createDate': createDate.toIso8601String(),
     };
+
+  factory Recipe.fromJson(Map<String, dynamic> json) => new Recipe(
+    userId: json['userId'],
+    name: json['name'],
+    ingredients: Ingredient.fromJsonToList(json['ingredients']),
+    tips: json['tips'],
+    recipe: json['recipe'],
+    imagePath: json['imagePath'],
+    createDate: DateTimeHelper.toDateTime(json['createDate']),
+  );
+
+  static List<Recipe> fromJsonToList(dynamic json) => List<Recipe>
+    .from((json as List)
+    .map((i) => Recipe.fromJson(i.data())))
+    .toList();
 }
