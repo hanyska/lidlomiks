@@ -1,1 +1,47 @@
-/* You can add global styles to this file, and also import other style files */
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Lato, "Helvetica Neue", sans-serif;
+}
+
+
+@font-face {
+  font-family: 'Dancing Script';
+  src: url('assets/fonts/Dancing/DancingScript-Regular.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+$primary-color: #B71E3A;
+$dark-color: #2F2D2E;
+
+.header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .lidlomiks-text {
+    font-family: 'Dancing Script', cursive;
+    font-size: 3rem;
+
+    > span:nth-child(1) {
+      color: $primary-color
+    }
+
+    > span:nth-child(2) {
+      color: $dark-color
+    }
+  }
+
+  .header-right {
+    > span {
+      padding: 0 10px;
+    }
+  }
+}
+
+
