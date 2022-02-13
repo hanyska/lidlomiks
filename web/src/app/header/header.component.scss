@@ -1,0 +1,31 @@
+@import "src/shared/colors";
+
+.mat-toolbar {
+  background: transparent;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .lidlomiks-text {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 3rem;
+
+    > span:nth-child(1) {
+      color: $primary-color
+    }
+
+    > span:nth-child(2) {
+      color: $dark-color
+    }
+  }
+
+  .header-right {
+    > span {
+      padding: 0 10px;
+    }
+  }
+}
