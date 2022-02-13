@@ -1,31 +1,27 @@
 @import "src/shared/colors";
 
-.mat-toolbar {
-  background: transparent;
-}
+.navbar {
+  &-nav, .nav-link {
+    color: white;
+    font-size: 1rem;
+    padding: 0 2rem;
 
-.header {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  .lidlomiks-text {
-    font-family: 'Work Sans', sans-serif;
-    font-size: 3rem;
-
-    > span:nth-child(1) {
+    &:hover, &:focus {
       color: $primary-color
     }
+  }
 
-    > span:nth-child(2) {
-      color: $dark-color
+  &-brand {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 3.5rem;
+    color: white;
+    font-weight: 700;
+    letter-spacing: 0.02rem;
+
+    &:hover, &:focus {
+      color: $primary-color
     }
   }
 
-  .header-right {
-    > span {
-      padding: 0 10px;
-    }
-  }
+
 }
