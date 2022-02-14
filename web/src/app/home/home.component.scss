@@ -1,0 +1,16 @@
+@import "src/shared/colors";
+
+
+.home-primary-text {
+  font-family: 'Work Sans', sans-serif;
+  font-size: 3.5rem;
+  color: $white;
+  font-weight: 700;
+  letter-spacing: 0.02rem;
+}
+
+.home-secondary-text {
+  font-family: 'Caveat', cursive;
+  font-size: 3.125rem;
+  color: $primary-color;
+}
