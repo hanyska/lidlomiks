@@ -2,9 +2,9 @@
 
 .navbar {
   &-nav, .nav-link {
-    color: white;
+    color: $white;
     font-size: 1rem;
-    padding: 0 2rem;
+    padding: 0 1rem;
 
     &:hover, &:focus {
       color: $primary-color
@@ -14,7 +14,7 @@
   &-brand {
     font-family: 'Work Sans', sans-serif;
     font-size: 3.5rem;
-    color: white;
+    color: $white;
     font-weight: 700;
     letter-spacing: 0.02rem;
 
