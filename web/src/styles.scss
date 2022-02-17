@@ -25,3 +25,45 @@ body {
 .btn:focus {
   box-shadow: 0 0 0 0.1rem $primary-color;
 }
+
+.bg-ldx {
+  &-primary {
+    color: $white;
+    background-color: $primary-color;
+    border-color: $primary-color;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+      border-color: darken($primary-color, 10%);
+    }
+  }
+  &-success {
+    color: $white;
+    background-color: $green;
+    border-color: $green;
+
+    &:hover {
+      background-color: darken($green, 10%);
+      border-color: darken($green, 10%);
+    }
+  }
+}
+
+
+.badge-ldx {
+  padding: 0.7rem 1.2rem;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: lighter;
+  cursor: default;
+}
+
+.header-main-ldx {
+  font-size: 3.5rem;
+  font-weight: bold;
+  font-family: 'Work Sans', sans-serif;
+  color: $black;
+  padding: 1rem 0;
+}
+
+
